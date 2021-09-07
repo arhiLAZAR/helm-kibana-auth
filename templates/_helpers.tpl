@@ -22,3 +22,19 @@ Create chart name and version as used by the chart label.
 {{- define "kibana-auth.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create an enquoted environment variable to translate dictionary from helm values to bash.
+*/}}
+{{- define "dict2bash" -}}
+{{- $index := 0 | int -}}
+{{- $dict := . -}}
+{{- $len := len $dict | int -}}
+'
+{{- range $dict -}}
+{{- $index = $index | add1 -}}
+{{- . | quote -}}
+{{- if lt $index $len }} {{ end -}}
+{{- end -}}
+'
+{{- end -}}
