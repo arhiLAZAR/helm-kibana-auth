@@ -7,6 +7,9 @@ metadata:
     chart: {{ template "kibana-auth.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+{{- if .Values.extraLabels }}
+{{ toYaml .Values.extraLabels | indent 4 }}
+{{- end }}
 spec:
   schedule: {{ .Values.syncLDAP.schedule| quote }}
   jobTemplate:
