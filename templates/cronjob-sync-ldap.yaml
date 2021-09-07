@@ -45,7 +45,7 @@ spec:
             - name: L2E_LDAP_FILTER
               value: {{ .Values.ldap.filter | quote }}
             - name: L2E_LDAP_GROUPS
-              value: {{ .Values.ldap.groups | quote }}
+              value: {{ include "dict2bash" .Values.ldap.groups }}
             - name: L2E_LDAP_GROUPS_LIST_KEY
               value: {{ .Values.ldap.groupListKey | quote }}
             - name: L2E_LDAP_KEY_FOR_USERNAME
@@ -63,7 +63,7 @@ spec:
             - name: L2E_ELASTIC_PASS
               value: {{ .Values.elastic.pass | quote }}
             - name: L2E_ELASTIC_ROLES
-              value: {{ .Values.elastic.roles | quote }}
+              value: {{ include "dict2bash" .Values.elastic.roles }}
             - name: L2E_ELASTIC_ROLE_FOR_IMPORTED_USERS
               value: {{ .Values.elastic.roleForImportedUsers | quote }}
             - name: L2E_ELASTIC_INSECURE_TLS
