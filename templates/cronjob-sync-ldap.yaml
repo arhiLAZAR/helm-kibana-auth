@@ -1,0 +1,74 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "kibana-auth.fullname" . }}-sync-ldap
+  labels:
+    app: {{ template "kibana-auth.fullname" . }}-sync-ldap
+    chart: {{ template "kibana-auth.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: {{ .Values.syncLDAP.schedule| quote }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ template "kibana-auth.fullname" . }}-sync-ldap
+          labels:
+            app: {{ template "kibana-auth.fullname" . }}-sync-ldap
+            release: {{ .Release.Name }}
+        spec:
+          restartPolicy: Never
+          {{- if .Values.images.pullSecret }}
+          imagePullSecrets:
+    {{ toYaml .Values.images.pullSecret | indent 8 }}
+          {{- end }}
+          containers:
+          - name: {{ template "kibana-auth.fullname" . }}-sync-ldap
+            image: "{{ .Values.images.syncLDAP.repository }}:{{ .Values.images.syncLDAP.tag }}"
+            imagePullPolicy: {{ .Values.images.pullPolicy }}
+            env:
+            - name: L2E_DEBUG
+              value: {{ .Values.debug | quote }}
+            - name: L2E_LDAP_DOMAIN
+              value: {{ .Values.ldap.domain | quote }}
+            - name: L2E_LDAP_PORT
+              value: {{ .Values.ldap.port | quote }}
+            - name: L2E_LDAP_SCHEMA
+              value: {{ .Values.ldap.schema | quote }}
+            - name: L2E_LDAP_LOGIN
+              value: {{ .Values.ldap.login | quote }}
+            - name: L2E_LDAP_PASS
+              value: {{ .Values.ldap.pass | quote }}
+            - name: L2E_LDAP_BASE_DN
+              value: {{ .Values.ldap.baseDN | quote }}
+            - name: L2E_LDAP_FILTER
+              value: {{ .Values.ldap.filter | quote }}
+            - name: L2E_LDAP_GROUPS
+              value: {{ .Values.ldap.groups | quote }}
+            - name: L2E_LDAP_GROUPS_LIST_KEY
+              value: {{ .Values.ldap.groupListKey | quote }}
+            - name: L2E_LDAP_KEY_FOR_USERNAME
+              value: {{ .Values.ldap.keyForUsername | quote }}
+            - name: L2E_LDAP_CA_FILE_PATH
+              value: {{ .Values.ldap.CAFilePath | quote }}
+            - name: L2E_ELASTIC_DOMAIN
+              value: {{ .Values.elastic.domain | quote }}
+            - name: L2E_ELASTIC_PORT
+              value: {{ .Values.elastic.port | quote }}
+            - name: L2E_ELASTIC_SCHEMA
+              value: {{ .Values.elastic.schema | quote }}
+            - name: L2E_ELASTIC_LOGIN
+              value: {{ .Values.elastic.login | quote }}
+            - name: L2E_ELASTIC_PASS
+              value: {{ .Values.elastic.pass | quote }}
+            - name: L2E_ELASTIC_ROLES
+              value: {{ .Values.elastic.roles | quote }}
+            - name: L2E_ELASTIC_ROLE_FOR_IMPORTED_USERS
+              value: {{ .Values.elastic.roleForImportedUsers | quote }}
+            - name: L2E_ELASTIC_INSECURE_TLS
+              value: {{ .Values.elastic.insecureTLS | quote }}
+
+            envFrom:
+              - secretRef:
+                  name: {{ template "kibana-auth.fullname" . }}
