@@ -1,0 +1,42 @@
+# Default values for openldap.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+debug: "false"
+
+images:
+  # pullSecret: harbor
+  pullPolicy: IfNotPresent
+  syncLDAP:
+    repository: arhilazar/ldap-to-elastic
+    tag: latest
+
+syncLDAP:
+  schedule: "*/10 * * * *"
+
+ldap:
+  domain: localhost
+  port: 389
+  schema: ldap
+  login: "cn=admin,dc=example,dc=org"
+  pass: "Not@SecureP@ssw0rd"
+  baseDN: "dc=example,dc=org"
+  filter: "objectclass=inetOrgPerson"
+  groups:
+    - CI
+    - DevOps
+  groupListKey: memberOf
+  keyForUsername: cn
+  CAFilePath: ""
+
+elastic:
+  domain: localhost
+  port: 9200
+  schema: http
+  insecureTLS: false
+  login: "elastic"
+  pass: "Not@SecureP@ssw0rd"
+  roles:
+    - superuser
+    - kibana_admin
+  roleForImportedUsers: imported_from_ldap
