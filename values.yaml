@@ -57,6 +57,8 @@ oauth2Proxy:
     #   cpu: 10m
     #   memory: 20Mi
 
+  config: {}
   alphaConfig: {}
 
-  config: {}
+nodeSelector: {}
+tolerations: []

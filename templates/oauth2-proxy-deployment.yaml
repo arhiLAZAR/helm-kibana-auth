@@ -37,6 +37,12 @@ spec:
           volumeMounts:
             - name: configs
               mountPath: /etc/oauth2-proxy
+      {{- with .Values.tolerations }}
+      tolerations: {{ toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: configs
           configMap:
