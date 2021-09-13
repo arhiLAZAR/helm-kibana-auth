@@ -57,10 +57,6 @@ oauth2Proxy:
     #   cpu: 10m
     #   memory: 20Mi
 
-  args:
-    - --config=/etc/oauth2-proxy/config.cfg
-    - --alpha-config=/etc/oauth2-proxy/alpha-config.yaml
-
   alphaConfig: {}
 
   config: {}

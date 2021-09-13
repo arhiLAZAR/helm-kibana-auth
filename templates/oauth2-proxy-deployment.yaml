@@ -24,9 +24,13 @@ spec:
           {{- if .Values.oauth2Proxy.resources }}
           resources: {{ toYaml .Values.oauth2Proxy.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.oauth2Proxy.args }}
-          args: {{ toYaml .Values.oauth2Proxy.args | nindent 12 }}
-          {{- end }}
+          args:
+            {{- if .Values.oauth2Proxy.config }}
+            - --config=/etc/oauth2-proxy/config.cfg
+            {{- end }}
+            {{- if .Values.oauth2Proxy.alphaConfig }}
+            - --alpha-config=/etc/oauth2-proxy/alpha-config.yaml
+            {{- end }}
           ports:
             - containerPort: {{ .Values.oauth2Proxy.port }}
               protocol: TCP

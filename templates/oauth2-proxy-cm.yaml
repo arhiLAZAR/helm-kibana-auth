@@ -8,7 +8,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
+  {{- if .Values.oauth2Proxy.alphaConfig }}
   alpha-config.yaml: |
     {{- .Values.oauth2Proxy.alphaConfig | toYaml | nindent 4 }}
+  {{- end }}
+  {{- if .Values.oauth2Proxy.config }}
   config.cfg: |
     {{- .Values.oauth2Proxy.config | toToml | nindent 4 }}
+  {{- end }}
