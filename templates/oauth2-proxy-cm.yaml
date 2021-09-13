@@ -11,6 +11,4 @@ data:
   alpha-config.yaml: |
     {{- .Values.oauth2Proxy.alphaConfig | toYaml | nindent 4 }}
   config.cfg: |
-    {{- range $key, $value := .Values.oauth2Proxy.config }}
-    {{ $key }}={{ $value }}
-    {{- end }}
+    {{- .Values.oauth2Proxy.config | toToml | nindent 4 }}
