@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+  labels:
+    app: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+    chart: {{ template "kibana-auth.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.oauth2Proxy.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+  template:
+    metadata:
+      labels:
+        app: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+    spec:
+      containers:
+        - name: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+          image: "{{ .Values.images.oauth2Proxy.repository }}:{{ .Values.images.oauth2Proxy.tag }}"
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          {{- if .Values.oauth2Proxy.resources }}
+          resources: {{ toYaml .Values.oauth2Proxy.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.oauth2Proxy.args }}
+          args: {{ toYaml .Values.oauth2Proxy.args | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.oauth2Proxy.port }}
+              protocol: TCP
+          volumeMounts:
+            - name: configs
+              mountPath: /etc/oauth2-proxy
+      volumes:
+        - name: configs
+          configMap:
+            name: {{ template "kibana-auth.fullname" . }}-oauth2-proxy-config

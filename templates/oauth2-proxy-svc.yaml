@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+  labels:
+    app: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+    chart: {{ template "kibana-auth.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.oauth2Proxy.port }}
+      targetPort: {{ .Values.oauth2Proxy.port }}
+  selector:
+    app: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
