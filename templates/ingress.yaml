@@ -54,7 +54,7 @@ spec:
       paths:
       - backend:
           service:
-            name: kibana-auth-oauth2-proxy
+            name: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
             port:
               number: 4180
         path: /oauth2
