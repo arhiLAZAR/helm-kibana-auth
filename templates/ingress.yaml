@@ -26,7 +26,7 @@ spec:
           service:
             name: kibana-kibana
             port:
-              number: 5601
+              number: {{ .Values.kibana.port }}
         path: /
         pathType: ImplementationSpecific
   tls:
@@ -56,7 +56,7 @@ spec:
           service:
             name: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
             port:
-              number: 4180
+              number: {{ .Values.oauth2Proxy.port }}
         path: /oauth2
         pathType: Prefix
   tls:
