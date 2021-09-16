@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kibana-kibana
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    meta.helm.sh/release-name: kibana
+    nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start?rd=$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      auth_request_set $authHeader0 $upstream_http_x_auth_request_preferred_username;
+      proxy_set_header 'es-security-runas-user' $authHeader0;
+      proxy_set_header Authorization "Basic {{ (printf "%s:%s" .Values.elastic.login .Values.elastic.pass) | b64enc }}";
+spec:
+  rules:
+  - host: {{ .Values.kibana.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: kibana-kibana
+            port:
+              number: 5601
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - {{ .Values.kibana.host }}
+    secretName: kibana-ingress-tls
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kibana-auth
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+  - host: {{ .Values.kibana.host }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: kibana-auth-oauth2-proxy
+            port:
+              number: 4180
+        path: /oauth2
+        pathType: Prefix
+  tls:
+  - hosts:
+    - {{ .Values.kibana.host }}
+    secretName: kibana-ingress-tls

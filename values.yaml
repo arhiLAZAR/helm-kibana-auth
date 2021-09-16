@@ -60,5 +60,8 @@ oauth2Proxy:
   config: {}
   alphaConfig: {}
 
+kibana:
+  host: "kibana.example.org"
+
 nodeSelector: {}
 tolerations: []
