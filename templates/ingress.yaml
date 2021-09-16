@@ -31,7 +31,7 @@ spec:
   tls:
   - hosts:
     - {{ .Values.kibana.host }}
-    secretName: kibana-ingress-tls
+    secretName: {{ template "kibana-auth.fullname" . }}-ingress-tls
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -61,4 +61,4 @@ spec:
   tls:
   - hosts:
     - {{ .Values.kibana.host }}
-    secretName: kibana-ingress-tls
+    secretName: {{ template "kibana-auth.fullname" . }}-ingress-tls
