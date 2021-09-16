@@ -8,7 +8,6 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start?rd=$escaped_request_uri
     nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
@@ -16,6 +15,9 @@ metadata:
       auth_request_set $authHeader0 $upstream_http_x_auth_request_preferred_username;
       proxy_set_header 'es-security-runas-user' $authHeader0;
       proxy_set_header Authorization "Basic {{ (printf "%s:%s" .Values.elastic.login .Values.elastic.pass) | b64enc }}";
+    {{- if .Values.kibana.extraAnnotations }}
+    {{- .Values.kibana.extraAnnotations | toYaml | nindent 4 }}
+    {{- end }}
 spec:
   rules:
   - host: {{ .Values.kibana.host }}
@@ -45,7 +47,9 @@ metadata:
     heritage: {{ .Release.Service }}
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    {{- if .Values.kibana.extraAnnotations }}
+    {{- .Values.kibana.extraAnnotations | toYaml | nindent 4 }}
+    {{- end }}
 spec:
   rules:
   - host: {{ .Values.kibana.host }}

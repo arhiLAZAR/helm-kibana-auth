@@ -64,6 +64,7 @@ kibana:
   host: "kibana.example.org"
   port: 5601
   serviceName: kibana-kibana
+  extraAnnotations: {}
 
 nodeSelector: {}
 tolerations: []
