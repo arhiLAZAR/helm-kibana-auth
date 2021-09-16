@@ -1,7 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: kibana-kibana
+  name: {{ template "kibana-auth.fullname" . }}-kibana
+  labels:
+    app: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+    chart: {{ template "kibana-auth.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: nginx
@@ -33,7 +38,12 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: kibana-auth
+  name: {{ template "kibana-auth.fullname" . }}-auth
+  labels:
+    app: {{ template "kibana-auth.fullname" . }}-oauth2-proxy
+    chart: {{ template "kibana-auth.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
