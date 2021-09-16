@@ -63,6 +63,7 @@ oauth2Proxy:
 kibana:
   host: "kibana.example.org"
   port: 5601
+  serviceName: kibana-kibana
 
 nodeSelector: {}
 tolerations: []

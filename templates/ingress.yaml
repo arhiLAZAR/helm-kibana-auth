@@ -23,7 +23,7 @@ spec:
       paths:
       - backend:
           service:
-            name: kibana-kibana
+            name: {{ .Values.kibana.serviceName }}
             port:
               number: {{ .Values.kibana.port }}
         path: /
