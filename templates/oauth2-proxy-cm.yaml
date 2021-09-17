@@ -16,3 +16,34 @@ data:
   config.cfg: |
     {{- .Values.oauth2Proxy.config | toToml | nindent 4 }}
   {{- end }}
+  {{- if and (.Values.oauth2Proxy.keycloakBackend) (not .Values.oauth2Proxy.config) }}
+  config.cfg: |
+    http_address = "0.0.0.0:{{ .Values.oauth2Proxy.port }}"
+    provider = "oidc"
+    provider_display_name = "Keycloak"
+    set_xauthrequest = true
+    approval_prompt = "force"
+    {{- if .Values.ldap.groups }}
+    {{- range .Values.ldap.groups }}
+    allowed_groups = {{ . | quote }}
+    {{- end }}
+    {{- end }}
+    {{- with .Values.oauth2Proxy.keycloakBackend }}
+    login_url = {{ .login_url | quote }}
+    redeem_url = {{ .redeem_url | quote }}
+    validate_url = {{ .validate_url | quote }}
+    scope = {{ .scope | quote }}
+    client_id = {{ .client_id | quote }}
+    client_secret = {{ .client_secret | quote }}
+    oidc_issuer_url = {{ .oidc_issuer_url | quote }}
+    cookie_secret = {{ .cookie_secret | quote }}
+    cookie_secure = "true"
+    cookie_name = {{ .cookie_name | quote }}
+    session_cookie_minimal = "true"
+    reverse_proxy = "true"
+    upstreams = "file:///dev/null/"
+    flush_interval = {{ .flush_interval | quote }}
+    email_domains = {{ include "dict2cfg" .email_domains }}
+    cookie_domains = {{ include "dict2cfg" .cookie_domains }}
+    {{- end }}
+  {{- end }}
