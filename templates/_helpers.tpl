@@ -38,3 +38,19 @@ Create an enquoted environment variable to translate dictionary from helm values
 {{- end -}}
 '
 {{- end -}}
+
+{{/*
+Create an enquoted environment variable to translate dictionary from helm values to cfg.
+*/}}
+{{- define "dict2cfg" -}}
+{{- $index := 0 | int -}}
+{{- $dict := . -}}
+{{- $len := len $dict | int -}}
+[
+{{- range $dict -}}
+{{- $index = $index | add1 -}}
+{{- . | quote -}}
+{{- if lt $index $len }}, {{ end -}}
+{{- end -}}
+]
+{{- end -}}
