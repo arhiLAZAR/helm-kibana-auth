@@ -25,7 +25,7 @@ spec:
           resources: {{ toYaml .Values.oauth2Proxy.resources | nindent 12 }}
           {{- end }}
           args:
-            {{- if .Values.oauth2Proxy.config }}
+            {{- if or .Values.oauth2Proxy.config .Values.oauth2Proxy.keycloakBackend }}
             - --config=/etc/oauth2-proxy/config.cfg
             {{- end }}
             {{- if .Values.oauth2Proxy.alphaConfig }}
