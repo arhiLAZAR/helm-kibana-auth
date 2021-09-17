@@ -59,6 +59,21 @@ oauth2Proxy:
 
   config: {}
   alphaConfig: {}
+  keycloakBackend: {}
+    # login_url: "https://auth.example.org/auth/realms/example/protocol/openid-connect/auth"
+    # redeem_url: "https://auth.example.org/auth/realms/example/protocol/openid-connect/token"
+    # validate_url: "https://auth.example.org/auth/realms/example/protocol/openid-connect/userinfo"
+    # scope: "openid email profile groups eid"
+    # client_id: "proxy"
+    # client_secret: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    # oidc_issuer_url: "https://auth.example.org/auth/realms/example"
+    # cookie_secret: "Not@SecureSecret"
+    # cookie_name: "sso_cookie_name"
+    # flush_interval: "500ms"
+    # email_domains:
+    #   - "*"
+    # cookie_domains:
+    #   - ".example.org"
 
 kibana:
   host: "kibana.example.org"
