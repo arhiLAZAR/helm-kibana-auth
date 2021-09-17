@@ -14,6 +14,9 @@ images:
     repository: quay.io/oauth2-proxy/oauth2-proxy
     tag: v7.1.3
 
+nodeSelector: {}
+tolerations: []
+
 syncLDAP:
   schedule: "*/10 * * * *"
 
@@ -43,6 +46,12 @@ elastic:
     - superuser
     - kibana_admin
   roleForImportedUsers: imported_from_ldap
+
+kibana:
+  host: "kibana.example.org"
+  port: 5601
+  serviceName: kibana-kibana
+  extraAnnotations: {}
 
 oauth2Proxy:
   replicas: 1
@@ -74,12 +83,3 @@ oauth2Proxy:
     #   - "*"
     # cookie_domains:
     #   - ".example.org"
-
-kibana:
-  host: "kibana.example.org"
-  port: 5601
-  serviceName: kibana-kibana
-  extraAnnotations: {}
-
-nodeSelector: {}
-tolerations: []
