@@ -24,9 +24,7 @@ data:
     set_xauthrequest = true
     approval_prompt = "force"
     {{- if .Values.ldap.groups }}
-    {{- range .Values.ldap.groups }}
-    allowed_groups = {{ . | quote }}
-    {{- end }}
+    allowed_groups = {{ include "dict2cfg" .Values.ldap.groups }}
     {{- end }}
     {{- with .Values.oauth2Proxy.keycloakBackend }}
     login_url = {{ .login_url | quote }}
