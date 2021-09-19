@@ -51,6 +51,18 @@ spec:
               value: {{ .Values.ldap.keyForUsername | quote }}
             - name: L2E_LDAP_CA_FILE_PATH
               value: {{ .Values.ldap.CAFilePath | quote }}
+            {{- if .Values.ldap.credsFromExistingSecret}}
+            - name: L2E_LDAP_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ldap.credsFromExistingSecret.secretName }}
+                  key: {{ .Values.ldap.credsFromExistingSecret.loginField }}
+            - name: L2E_LDAP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.ldap.credsFromExistingSecret.secretName }}
+                  key: {{ .Values.ldap.credsFromExistingSecret.passField }}
+            {{- end }}
             - name: L2E_ELASTIC_DOMAIN
               value: {{ .Values.elastic.domain | quote }}
             - name: L2E_ELASTIC_PORT
@@ -63,6 +75,18 @@ spec:
               value: {{ .Values.elastic.roleForImportedUsers | quote }}
             - name: L2E_ELASTIC_INSECURE_TLS
               value: {{ .Values.elastic.insecureTLS | quote }}
+            {{- if .Values.elastic.credsFromExistingSecret}}
+            - name: L2E_ELASTIC_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elastic.credsFromExistingSecret.secretName }}
+                  key: {{ .Values.elastic.credsFromExistingSecret.loginField }}
+            - name: L2E_ELASTIC_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.elastic.credsFromExistingSecret.secretName }}
+                  key: {{ .Values.elastic.credsFromExistingSecret.passField }}
+            {{- end }}
             envFrom:
               - secretRef:
                   name: {{ template "kibana-auth.fullname" . }}-creds

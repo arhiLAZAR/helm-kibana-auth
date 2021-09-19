@@ -26,6 +26,10 @@ ldap:
   schema: ldap
   login: "cn=admin,dc=example,dc=org"
   pass: "Not@SecureP@ssw0rd"
+  credsFromExistingSecret: {}
+    # secretName: ldap-credentials
+    # loginField: username
+    # passField: password
   baseDN: "dc=example,dc=org"
   filter: "objectclass=inetOrgPerson"
   groups:
@@ -42,6 +46,10 @@ elastic:
   insecureTLS: false
   login: "elastic"
   pass: "Not@SecureP@ssw0rd"
+  credsFromExistingSecret: {}
+    # secretName: elastic-credentials
+    # loginField: username
+    # passField: password
   roles:
     - superuser
     - kibana_admin
